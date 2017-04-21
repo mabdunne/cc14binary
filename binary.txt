@@ -1,0 +1,173 @@
+Martha Dunne
+Binary Exercises
+
+1. Without using a calculator:
+
+64 in base 10 -> base 2 (example)
+	100 base 10 = 1000000 base 2
+
+100 in base 10 -> base 2
+	100 = 64 + 32 + 4
+	100 in base 10 = 110010 base 2
+
+100 in base 10 -> base 5
+	100 in base 10 = 400 base 5
+
+1111111 in base 2 -> base 10
+	100 = 25 * 4
+	1111111 in base 2 = 64+32+16+8+4+2
+	1111111 in base 2 = 128 in base 10
+
+2. Describe the algorithm for adding two binary numbers
+Essentially I am trying to simulate bitwise operators using arrays.
+
+  Example:
+    1001    9
+   +0011   +3
+   -----   --
+   01100   12
+
+  Assumptions
+  1) describe columns as c(i)
+	position numbers from right to left
+	c5	c4	c3	c2	c1	c0
+	5	4	3	2	1	0
+  2) rules 
+   a) verify binary, there are no numbers > 2, or < 0
+   b) only possible values are
+     0+0=0, 
+     1+0=1, 
+     0+1=1, 
+     1+1=10, or 0 plus carryover 10 
+     1+1+1=11, or 1 plus carryover 10
+
+    Initialize array[3..0] for both values; val1 = 1001, value 2 = 0011
+        val1[3..0] = {1,0,0,1}     
+        val2[3..0] = {0,0,1,1}
+    Initialize array for sum, 1 bit larger than values
+        sum[4..0] = { 0,0,0,0,0 }
+    Set variable carryover = 0
+    Initialize counter position counter i=0
+    Loop Recursively from right to left(i=0, then 1, then 2), until there are no more numbers in array
+	tmp = 0
+	verify binary, 0 <= val1[i] <= 2
+	verify binary, 0 <= val2[i] <= 2
+	tmp = val1(i) + val2(i) + carryover
+	If (tmp <= 1)
+		sum[i] = tmp
+                carryover=0
+	else if (tmp is 10)
+		sum[i] = 0
+		carryover=1
+	else if (tmp=11)
+		sum[i] = 1
+		carryover = 1
+        increment i
+        if(i==4)
+                sum[i] = carryover
+    End loop 	
+    for i - 4..0
+        console.log( sum[i] )
+
+3. Describe the algorithm for multiplying two binary numbers
+Similar to above except val2 is recursively multiply and carryover, then call sums on final array
+
+Example:
+    1001    9
+   x0011   x3
+   -----   --
+   11011   27
+
+   b) rules only possible values for multiply
+     0*0=0, 
+     1*0=1, 
+     0*1=1, 
+     1*1=1
+
+    Initialize array[3..0] for both values; val1 = 1001, value 2 = 0011
+        val1[3..0] = {1,0,0,1}    
+        val2[3..0] = {0,0,1,1}   multiplier row
+    Initialize 4x4 array for mult, 1 row for each val2 column
+        mult[]    = { 0,0,0,0 }
+                    { 0,0,0,0 }
+                    { 0,0,0,0 }
+                    { 0,0,0,0 }
+    Initialize array for sum, potentially 8 bits
+        sum[4..0] = { 0,0,0,0,0,0,0,0 }    
+    Initialize val2 column position ctr2=0
+    Loop Recursively from val2 columns 0, then 1, then 2, then 3
+        Initialize val1 column position ctr1=0        
+        Loop recursively thru val1 columns 0, then 1, then 2, then3, right to left; no more numbers in array
+	    tmp = 0
+	    verify binary, 0 <= val1[ctr1] <= 2
+	    verify binary, 0 <= val2[ctr2] <= 2
+	    mult[ctr1,ctr2] = val(ctr1) * val2(ctr2) 
+            Increment ctr1
+        loop ends when hit max bit of val1
+        Increment ctr2
+    Loop ends when hit max bit of val 2
+    
+    Modify or reuse the algorithm for adding two binary numbers, and recursively add the results of the rows in must multi array.
+
+
+4. Is there a trick for multiplying numbers by 2? Dividing numbers by 2?
+
+  Bitwise shift operators
+
+
+
+5. Write the truth tables for AND, OR, and NOT
+
+  AND:
+   && | a b
+    -------
+    1 | 1 1
+    0 | 1 0
+    0 | 0 1
+    0 | 0 0
+  OR:
+   || | a b
+    -------
+    1 | 1 1
+    1 | 1 0
+    1 | 0 1
+    0 | 0 0
+ NOT:
+   ! | a 
+    -------
+    1 | 0 
+    0 | 1 
+
+ 
+
+
+EXTRA CREDIT 1: Using just the operators described above, build a "half adder".
+A "half adder" takes in two inputs, A and B, and produces as output
+the "sum" of A and B, and a "carry" if one exists.
+
+
+Here is the truth table for the "half adder". + is the sum, and "C"
+is the carry.
+    + C | A B
+    ---------
+    0 0 | 0 0
+    1 0 | 0 1
+    1 0 | 1 0
+    1 1 | 1 1
+
+EXTRA CREDIT 2: Using just the operators described above, build a "full adder".
+A "full adder" takes in three inputs: A, B, and Cin (the carry in), and produces two
+outputs: the sum (S) and a carry out (Cout)
+
+Here is the truth table for the "full adder".
+
+A  B  Cin  | Cout S
+------------------
+0  0  0    |  0  0
+0  0  1    |  0  1
+0  1  0    |  0  1
+0  1  1    |  1  0
+1  0  0    |  0  1
+1  0  1    |  1  0
+1  1  0    |  1  0
+1  1  1    |  1  1
