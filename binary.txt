@@ -88,26 +88,29 @@ Example:
         val1[3..0] = {1,0,0,1}    
         val2[3..0] = {0,0,1,1}   multiplier row
     Initialize 4x4 array for mult, 1 row for each val2 column
-        mult[]    = { 0,0,0,0 }
-                    { 0,0,0,0 }
-                    { 0,0,0,0 }
-                    { 0,0,0,0 }
+        mult[]    = { 0,0,0,0,0,0,0,0 }
+                    { 0,0,0,0,0,0,0,0 }
+                    { 0,0,0,0,0,0,0,0 }
+                    { 0,0,0,0,0,0,0,0 }
     Initialize array for sum, potentially 8 bits
         sum[4..0] = { 0,0,0,0,0,0,0,0 }    
     Initialize val2 column position ctr2=0
     Loop Recursively from val2 columns 0, then 1, then 2, then 3
         Initialize val1 column position ctr1=0        
-        Loop recursively thru val1 columns 0, then 1, then 2, then3, right to left; no more numbers in array
+        Initialize val2 positional padCtr = ctr2
+        Pad mult[ctr2,x] with 0’s for first padCtr positions
+        Loop recursively thru val1 columns 0, then 1, then 2, then3, right to left; until no more numbers in array
 	    tmp = 0
 	    verify binary, 0 <= val1[ctr1] <= 2
 	    verify binary, 0 <= val2[ctr2] <= 2
-	    mult[ctr1,ctr2] = val(ctr1) * val2(ctr2) 
+	    mult[ctr2,padCtr] = val(ctr1) * val2(ctr2) 
             Increment ctr1
+            Increment padCtr
         loop ends when hit max bit of val1
         Increment ctr2
     Loop ends when hit max bit of val 2
     
-    Modify or reuse the algorithm for adding two binary numbers, and recursively add the results of the rows in must multi array.
+    Modify or reuse the algorithm for adding two binary numbers, and recursively add the results of the rows in multi array.
 
 
 4. Is there a trick for multiplying numbers by 2? Dividing numbers by 2?
